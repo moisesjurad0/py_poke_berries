@@ -12,3 +12,4 @@ isort
 rich
 aiopokeapi
 httpx
+requests
