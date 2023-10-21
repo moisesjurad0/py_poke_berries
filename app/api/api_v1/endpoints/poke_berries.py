@@ -1,22 +1,19 @@
-from collections import Counter
-
-import time
-from fastapi import APIRouter
-from typing import Dict, List, Optional  # , List
+import asyncio
+import base64
 import logging
-from typing import Union
-from fastapi.responses import HTMLResponse
-from pydantic import BaseModel  # , PositiveInt, Field
+import statistics
+from collections import Counter
 from enum import Enum
 from functools import reduce
-import asyncio
-import aiopoke
-import requests
-import statistics
-
-import matplotlib.pyplot as plt
 from io import BytesIO
-import base64
+from typing import Dict, List, Optional, Union  # , List
+
+import aiopoke
+import matplotlib.pyplot as plt
+import requests
+from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
+from pydantic import BaseModel  # , PositiveInt, Field
 
 router = APIRouter()
 
@@ -40,12 +37,23 @@ async def all_berry_stats() -> AllBerryStatsResponseModel:
     r_json = response.json()
     berries_count = int(r_json['count'])
 
+    # this works in python 3.10
     results = []
-    async with asyncio.TaskGroup() as tg:
-        async with aiopoke.AiopokeClient() as client:
-            for i in range(1, berries_count + 1):
-                task = tg.create_task(client.get_berry(i))
-                results.append(await task)
+    async with aiopoke.AiopokeClient() as client:
+        tasks = [
+            asyncio.create_task(
+                client.get_berry(i))
+            for i in range(1, berries_count + 1)]
+        results = await asyncio.gather(*tasks)
+
+    # # this works in python 3.11
+    # results = []
+    # async with asyncio.TaskGroup() as tg:
+    #     async with aiopoke.AiopokeClient() as client:
+    #         for i in range(1, berries_count + 1):
+    #             task = tg.create_task(client.get_berry(i))
+    #             results.append(await task)
+
     dict_final = {x.name: x.growth_time for x in results}
 
     print(dict_final)

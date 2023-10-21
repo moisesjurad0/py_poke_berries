@@ -1,15 +1,24 @@
-from api.api_v1.api import router as api_router
-from fastapi import FastAPI, Request 
-from mangum import Mangum
-# from mangum import Mangum, Contex
 import logging
+
+
+from api.api_v1.api import router as api_router
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 
-
+# ************ ENABLE ON DEV ENV ************
+# from pathlib import Path
+# import datetime
+# script_path = Path(__file__).absolute()
+# script_dir = Path(__file__).parent.absolute()
+# log_folder = script_dir / 'logs'
+# log_folder.mkdir(parents=True, exist_ok=True)
+# currentDT = datetime.datetime.now()
 default_log_args = {
     'level': logging.INFO,
     'format': '[%(asctime)s.%(msecs)03d] [%(levelname)s] [%(module)s] [%(funcName)s] [L%(lineno)d] [P%(process)d] [T%(thread)d] %(message)s',
     'datefmt': '%Y-%m-%d %H:%M:%S',
+    # 'filename': log_folder / f'quiz01scraper.api.{currentDT.strftime("%Y%m%d%H%M%S")}.log', # ENABLE ON DEV ENV
     'force': True,
 }
 logging.basicConfig(**default_log_args)
@@ -21,26 +30,20 @@ PokeBerriesAPI helps you do operations with Berries from PokeAPI. 🚀
 
 You will be able to:
 
-* **allBerryStats** (Create & Update & batch).
-* **histogram**.
+* **allBerryStats** (get statistics from PokeAPI Berries).
+* **histogram** (get histogram from statistics)
 """
 
 app = FastAPI(
     title="PokeBerries-API",
     description=description,
     summary="do PokeBerries operations.",
-    version="0.0.1",
-    # terms_of_service="http://example.com/terms/",
+    version="1.0.0",
     contact={
         "name": "moisesjurad0",
         "url": "https://linktr.ee/moisesjurad0",
-        # "email": "moises003@outlook.com",
     },
-    # license_info={
-    #     "name": "Apache 2.0",
-    #     "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
-    # },
-    root_path='/Prod'
+    root_path='/Prod'  # REMOVE ON DEV ENV
 )
 
 app.add_middleware(
@@ -49,15 +52,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# @app.get("/ok")
-# @app.get("/test")
-# async def test_ok():
-#     ok = 'ok'
-#     print(ok)
-#     logging.info(ok)
-#     return ok
 
 app.include_router(api_router, prefix="/api/v1")
 

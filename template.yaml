@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  py_poke_berries-stk1 | fastAPI stack
+  py-poke-berries-stk1 | fastAPI stack
 Globals:
   Function:
     Runtime: python3.10
