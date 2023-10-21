@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  py_poke_berries-stk1 | fastAPI stack
+Globals:
+  Function:
+    Runtime: python3.10
+    Architectures:
+      - x86_64
+    Timeout: 3
+    Environment:
+      Variables:
+        APP_NAME: py_poke_berries
+        MY_STAGE: Prod
+Resources:
+  PokeBerriesFastAPILambdaFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: app/
+      Handler: main.handler
+      Events:
+        MyEventSource01:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+            RestApiId: !Ref PokeBerriesFastAPI
+  PokeBerriesFastAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+Outputs:
+  PokeBerriesFastAPI:
+    Description: "API Gateway endpoint url"
+    Value: !Sub "https://${PokeBerriesFastAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  PokeBerriesFastAPILambdaFunction:
+    Description: "PokeBerriesFastAPI Lambda Function ARN"
+    Value: !GetAtt PokeBerriesFastAPILambdaFunction.Arn
+  PokeBerriesFastAPILambdaFunctionIamRole:
+    Description: "PokeBerriesFastAPI Lambda Function IAM Role ARN"
+    Value: !GetAtt PokeBerriesFastAPILambdaFunctionRole.Arn
