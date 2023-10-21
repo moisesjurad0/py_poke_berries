@@ -13,3 +13,4 @@ rich
 aiopokeapi
 httpx
 requests
+matplotlib

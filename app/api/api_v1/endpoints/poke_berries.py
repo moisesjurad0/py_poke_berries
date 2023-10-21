@@ -5,6 +5,7 @@ from fastapi import APIRouter
 from typing import Dict, List, Optional  # , List
 import logging
 from typing import Union
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel  # , PositiveInt, Field
 from enum import Enum
 from functools import reduce
@@ -12,6 +13,10 @@ import asyncio
 import aiopoke
 import requests
 import statistics
+
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 router = APIRouter()
 
@@ -58,3 +63,38 @@ async def all_berry_stats() -> AllBerryStatsResponseModel:
     logging.info(f'response=>{retorno}')
 
     return retorno
+
+
+@router.get("/histogram")
+async def generate_histogram():
+    # Generate sample data for the histogram
+    data = [1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 5]
+
+    # Create a histogram using Matplotlib
+    plt.hist(data, bins=5, edgecolor='black')
+    plt.title("Histogram")
+    plt.xlabel("Value")
+    plt.ylabel("Frequency")
+
+    # Save the plot as a PNG image
+    img_buffer = BytesIO()
+    plt.savefig(img_buffer, format="png")
+    img_buffer.seek(0)
+
+    # Encode the image in base64 for embedding in HTML
+    img_base64 = base64.b64encode(img_buffer.read()).decode()
+
+    # Generate the HTML to display the image
+    html_response = f"""
+    <html>
+    <head>
+        <title>Histogram</title>
+    </head>
+    <body>
+        <h1>Histogram</h1>
+        <img src="data:image/png;base64, {img_base64}" alt="Histogram">
+    </body>
+    </html>
+    """
+
+    return HTMLResponse(content=html_response)
