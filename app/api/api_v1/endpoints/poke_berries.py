@@ -85,21 +85,21 @@ async def generate_histogram():
     values = list(data.keys())
     frequencies = list(data.values())
 
-    # Create a histogram using Matplotlib
-    plt.bar(values, frequencies)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.bar(values, frequencies, color='skyblue', edgecolor='black')
     plt.title("Histogram")
     plt.xlabel("Berry Growth Time")
     plt.ylabel("Frequency")
 
-    # Save the plot as a PNG image
+    for i, freq in enumerate(frequencies):
+        ax.text(values[i], freq, str(freq), ha='center', va='bottom')
+
     img_buffer = BytesIO()
     plt.savefig(img_buffer, format="png")
     img_buffer.seek(0)
 
-    # Encode the image in base64 for embedding in HTML
     img_base64 = base64.b64encode(img_buffer.read()).decode()
 
-    # Generate the HTML to display the image
     html_response = f"""
     <html>
     <head>
