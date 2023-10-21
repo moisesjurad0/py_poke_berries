@@ -43,7 +43,7 @@ app = FastAPI(
         "name": "moisesjurad0",
         "url": "https://linktr.ee/moisesjurad0",
     },
-    root_path='/Prod'  # REMOVE ON DEV ENV
+    root_path='/Prod'  # REMOVE THIS CODE ON DEV ENV
 )
 
 app.add_middleware(
