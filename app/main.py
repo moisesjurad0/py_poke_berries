@@ -40,7 +40,7 @@ app = FastAPI(
     #     "name": "Apache 2.0",
     #     "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
     # },
-    #root_path='/Prod'
+    root_path='/Prod'
 )
 
 app.add_middleware(
