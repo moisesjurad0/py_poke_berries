@@ -64,16 +64,31 @@ async def all_berry_stats() -> AllBerryStatsResponseModel:
 
     return retorno
 
+# data = {
+#     "2": 5,
+#     "3": 5,
+#     "4": 3,
+#     "5": 5,
+#     "6": 4,
+#     "8": 7,
+#     "12": 1,
+#     "15": 5,
+#     "18": 17,
+#     "24": 12
+# }
+
 
 @router.get("/histogram")
 async def generate_histogram():
-    # Generate sample data for the histogram
-    data = [1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 5]
+    response = await all_berry_stats()
+    data = response.frequency_growth_time
+    values = list(data.keys())
+    frequencies = list(data.values())
 
     # Create a histogram using Matplotlib
-    plt.hist(data, bins=5, edgecolor='black')
+    plt.bar(values, frequencies)
     plt.title("Histogram")
-    plt.xlabel("Value")
+    plt.xlabel("Berry Growth Time")
     plt.ylabel("Frequency")
 
     # Save the plot as a PNG image
