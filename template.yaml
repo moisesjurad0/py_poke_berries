@@ -7,11 +7,11 @@ Globals:
     Runtime: python3.10
     Architectures:
       - x86_64
-    Timeout: 3
+    Timeout: 10
     Environment:
       Variables:
-        APP_NAME: py_poke_berries
-        MY_STAGE: Prod
+        MY_VAR1: hello_my_var1
+        MPLCONFIGDIR: /tmp
 Resources:
   PokeBerriesFastAPILambdaFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
