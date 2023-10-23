@@ -98,7 +98,7 @@ async def generate_histogram():
         <title>Histogram</title>
     </head>
     <body>
-        <h1>Berries Growth Histogram</h1>
+        <h1>Poke-Berries Growth Histogram</h1>
         <img src="data:image/png;base64, {img_base64}" alt="Histogram">
     </body>
     </html>
