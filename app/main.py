@@ -1,4 +1,5 @@
 import logging
+from typing import Any, Dict
 
 if __package__ is None or __package__ == '':
     # uses current directory visibility
@@ -19,7 +20,7 @@ from mangum import Mangum
 # log_folder = script_dir / 'logs'
 # log_folder.mkdir(parents=True, exist_ok=True)
 # currentDT = datetime.datetime.now()
-default_log_args = {
+default_log_args: Dict[str, Any] = {
     'level': logging.INFO,
     'format': '[%(asctime)s.%(msecs)03d] [%(levelname)s] [%(module)s] [%(funcName)s] [L%(lineno)d] [P%(process)d] [T%(thread)d] %(message)s',
     'datefmt': '%Y-%m-%d %H:%M:%S',
