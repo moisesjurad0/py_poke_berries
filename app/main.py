@@ -1,4 +1,5 @@
 import logging
+import os
 from typing import Any, Dict
 
 if __package__ is None or __package__ == '':
@@ -49,7 +50,7 @@ app = FastAPI(
         "name": "moisesjurad0",
         "url": "https://linktr.ee/moisesjurad0",
     },
-    root_path='/Prod'  # REMOVE THIS CODE ON DEV ENV
+    root_path=os.getenv('ROOT_PATH', default='')
 )
 
 app.add_middleware(
