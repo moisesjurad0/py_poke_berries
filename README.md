@@ -4,7 +4,11 @@
 
 ## Deployed on AWS
 
-Check out the live version at: <https://w37tltqhef.execute-api.us-east-1.amazonaws.com/Prod/docs>
+Check out the live version at:
+
+- <https://w37tltqhef.execute-api.us-east-1.amazonaws.com/Prod/docs>
+  - <https://w37tltqhef.execute-api.us-east-1.amazonaws.com/Prod/api/v1/poke-berries/allBerryStats>
+  - <https://w37tltqhef.execute-api.us-east-1.amazonaws.com/Prod/api/v1/poke-berries/histogram>
 
 ## How to run locally
 
