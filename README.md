@@ -18,8 +18,8 @@ Check out the live version at:
     # create virtual env
     python -m venv venv
 
-    # activate virtual env
-    .\venv\Scripts\activate.ps
+    # activate virtual env (on windows)
+    .\venv\Scripts\activate.ps1
 
     # install requirements
     pip install -r app/requirements.txt
