@@ -24,8 +24,7 @@ Check out the live version at: <https://w37tltqhef.execute-api.us-east-1.amazona
     uvicorn app.main:app --reload
     ```
 
-1. then go to localhost
-
+1. then check the OpenAPI specification on localhost
     - <http://127.0.0.1:8000/docs>
         - <http://127.0.0.1:8000/api/v1/poke-berries/allBerryStats>
         - <http://127.0.0.1:8000/api/v1/poke-berries/histogram>
