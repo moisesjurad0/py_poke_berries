@@ -16,3 +16,4 @@ requests
 types-requests
 matplotlib
 boto3
+numpy
