@@ -42,7 +42,7 @@ Check out the live version at:
     python -m venv venv
 
     # activate virtual env
-    .\venv\Scripts\activate.ps
+    .\venv\Scripts\activate.ps1
 
     # install requirements
     pip install -r tests/requirements.txt
@@ -59,6 +59,6 @@ Check out the live version at:
     # can also run mypy
     mypy app --ignore-missing-imports
 
-    # or just run tox
+    # or just run tox or tox -v
     tox
     ```
