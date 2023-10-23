@@ -6,7 +6,7 @@ from collections import Counter
 from enum import Enum
 from functools import reduce
 from io import BytesIO
-from typing import Dict, List, Optional, Union  # , List
+from typing import Dict, List, Optional, Union
 
 import aiopoke
 import matplotlib.pyplot as plt
@@ -71,20 +71,6 @@ async def all_berry_stats() -> AllBerryStatsResponseModel:
     logging.info(f'response=>{retorno}')
 
     return retorno
-
-# data = {
-#     "2": 5,
-#     "3": 5,
-#     "4": 3,
-#     "5": 5,
-#     "6": 4,
-#     "8": 7,
-#     "12": 1,
-#     "15": 5,
-#     "18": 17,
-#     "24": 12
-# }
-
 
 @router.get("/histogram")
 async def generate_histogram():

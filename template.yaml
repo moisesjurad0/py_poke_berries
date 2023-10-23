@@ -12,6 +12,7 @@ Globals:
       Variables:
         MY_VAR1: hello_my_var1
         MPLCONFIGDIR: /tmp
+        AWS_SAM_STACK_NAME: py-poke-berries-stk1
 Resources:
   PokeBerriesFastAPILambdaFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction

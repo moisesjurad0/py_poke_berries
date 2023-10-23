@@ -1,7 +1,12 @@
 import logging
 
+if __package__ is None or __package__ == '':
+    # uses current directory visibility
+    from api.api_v1.api import router as api_router
+else:
+    # uses current package visibility
+    from .api.api_v1.api import router as api_router
 
-from api.api_v1.api import router as api_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
