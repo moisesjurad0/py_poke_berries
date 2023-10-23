@@ -1,26 +1,25 @@
 import asyncio
 import base64
 import logging
-import statistics
 from collections import Counter
-from enum import Enum
 from functools import reduce
 from io import BytesIO
-from typing import Dict, List, Optional, Union
+from typing import Dict, List
 
 import aiopoke
 import matplotlib.pyplot as plt
+import numpy as np
 import requests
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
-from pydantic import BaseModel  # , PositiveInt, Field
+from pydantic import BaseModel
 
 router = APIRouter()
 
 
 class AllBerryStatsResponseModel(BaseModel):
     berries_names: List
-    min_growth_time: int  # PositiveInt
+    min_growth_time: int
     median_growth_time: float
     max_growth_time: int
     variance_growth_time: float
@@ -54,44 +53,43 @@ async def all_berry_stats() -> AllBerryStatsResponseModel:
     #             task = tg.create_task(client.get_berry(i))
     #             results.append(await task)
 
-    dict_final = {x.name: x.growth_time for x in results}
+    dict_name_n_growth = {x.name: x.growth_time for x in results}
+    print(dict_name_n_growth)
 
-    print(dict_final)
+    berries_names = list(dict_name_n_growth.keys())
+    growth_times = list(dict_name_n_growth.values())
 
     retorno = AllBerryStatsResponseModel(
-        berries_names=list(dict_final.keys()),
-        min_growth_time=min(dict_final.values()),
-        median_growth_time=statistics.median(dict_final.values()),
-        max_growth_time=max(dict_final.values()),
-        variance_growth_time=statistics.variance(dict_final.values()),
-        mean_growth_time=statistics.mean(dict_final.values()),
-        frequency_growth_time=dict(Counter(dict_final.values()))
+        berries_names=berries_names,
+        min_growth_time=np.min(growth_times),
+        median_growth_time=np.median(growth_times),
+        max_growth_time=np.max(growth_times),
+        variance_growth_time=np.var(growth_times),  # ddof=1),
+        mean_growth_time=np.mean(growth_times),
+        frequency_growth_time=dict(Counter(growth_times))
     )
 
     logging.info(f'response=>{retorno}')
-
     return retorno
+
 
 @router.get("/histogram")
 async def generate_histogram():
     response = await all_berry_stats()
-    data = response.frequency_growth_time
-    values = list(data.keys())
-    frequencies = list(data.values())
-
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.bar(values, frequencies, color='skyblue', edgecolor='black')
+    data_dict = response.frequency_growth_time
+    print(data_dict)
+    data = [key for key, value in data_dict.items() for _ in range(value)]
+    print(data)
+    plt.xticks(range(1, 30))
+    plt.yticks(range(1, 30))
+    plt.hist(data, bins=30)
     plt.title("Histogram")
-    plt.xlabel("Berry Growth Time")
+    plt.xlabel("Growth Time")
     plt.ylabel("Frequency")
-
-    for i, freq in enumerate(frequencies):
-        ax.text(values[i], freq, str(freq), ha='center', va='bottom')
 
     img_buffer = BytesIO()
     plt.savefig(img_buffer, format="png")
     img_buffer.seek(0)
-
     img_base64 = base64.b64encode(img_buffer.read()).decode()
 
     html_response = f"""
@@ -100,7 +98,7 @@ async def generate_histogram():
         <title>Histogram</title>
     </head>
     <body>
-        <h1>Histogram</h1>
+        <h1>Berries Growth Histogram</h1>
         <img src="data:image/png;base64, {img_base64}" alt="Histogram">
     </body>
     </html>
