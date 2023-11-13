@@ -109,11 +109,14 @@ async def generate_histogram():
 
 
 @router.get("/slow_method")
-async def slow_method(X_Amz_Invocation_Type: str | None = Header(default="'Event'")):
-    #x_amz_invocation_type    
-    #X_Amz_Invocation_Type
-    #X-Amz-Invocation-Type
-    
+async def slow_method(
+    #X_Amz_Invocation_Type: str | None = Header(default="'Event'"),
+    InvocationType: str | None = Header(default="RequestResponse "),
+):
+    # x_amz_invocation_type
+    # X_Amz_Invocation_Type
+    # X-Amz-Invocation-Type
+
     for i in range(45):
         logging.info(f'i->{i}')
         time.sleep(1)
