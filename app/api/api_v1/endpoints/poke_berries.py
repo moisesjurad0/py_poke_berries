@@ -111,6 +111,6 @@ async def generate_histogram():
 @router.get("/slow_method")
 async def slow_method():
 
-    for i in range(50):
+    for i in range(75):
         logging.info(f'i->{i}')
         time.sleep(1)

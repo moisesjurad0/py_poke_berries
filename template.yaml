@@ -7,7 +7,7 @@ Globals:
     Runtime: python3.10
     Architectures:
       - x86_64
-    Timeout: 10
+    Timeout: 120
     Environment:
       Variables:
         MY_VAR1: hello_my_var1
