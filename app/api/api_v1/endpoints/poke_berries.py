@@ -1,3 +1,4 @@
+import time
 import asyncio
 import base64
 import logging
@@ -105,3 +106,11 @@ async def generate_histogram():
     """
 
     return HTMLResponse(content=html_response)
+
+
+@router.get("/slow_method")
+async def slow_method():
+
+    for i in range(50):
+        logging.info(f'i->{i}')
+        time.sleep(1)
