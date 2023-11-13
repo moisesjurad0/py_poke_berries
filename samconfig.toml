@@ -1,8 +1,8 @@
 version = 0.1
 [default.deploy.parameters]
-stack_name = "py-poke-berries-stk1"
+stack_name = "slow-api-gateway-stk1"
 resolve_s3 = true
-s3_prefix = "py-poke-berries-stk1"
+s3_prefix = "slow-api-gateway-stk1"
 region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
 image_repositories = []

@@ -8,7 +8,7 @@ import requests
 Make sure env variable AWS_SAM_STACK_NAME exists with the name of the stack we are going to test. 
 """
 
-os.environ["AWS_SAM_STACK_NAME"] = "py-poke-berries-stk1"
+os.environ["AWS_SAM_STACK_NAME"] = "slow-api-gateway-stk1"
 
 class TestApiGateway:
 
