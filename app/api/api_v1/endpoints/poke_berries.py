@@ -1,17 +1,17 @@
-import time
 import asyncio
 import base64
 import logging
+import time
 from collections import Counter
 from functools import reduce
 from io import BytesIO
-from typing import Dict, List
+from typing import Annotated, Dict, List
 
 import aiopoke
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
-from fastapi import APIRouter
+from fastapi import APIRouter, FastAPI, Header
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 
@@ -109,8 +109,11 @@ async def generate_histogram():
 
 
 @router.get("/slow_method")
-async def slow_method():
-
-    for i in range(75):
+async def slow_method(X_Amz_Invocation_Type: str | None = Header(default="'Event'")):
+    #x_amz_invocation_type    
+    #X_Amz_Invocation_Type
+    #X-Amz-Invocation-Type
+    
+    for i in range(45):
         logging.info(f'i->{i}')
         time.sleep(1)
