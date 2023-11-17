@@ -20,6 +20,9 @@ Resources:
     Properties:
       CodeUri: app/
       Handler: main.handler
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName: "*"
       Events:
         MyEventSource01:
           Type: Api

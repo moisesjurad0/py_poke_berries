@@ -2,6 +2,8 @@ import logging
 import os
 from typing import Any, Dict
 
+import uvicorn
+
 if __package__ is None or __package__ == '':
     # uses current directory visibility
     from api.api_v1.api import router as api_router
@@ -63,3 +65,6 @@ app.add_middleware(
 app.include_router(api_router, prefix="/api/v1")
 
 handler = Mangum(app)
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,5 +1,7 @@
 import asyncio
 import base64
+import json
+# import json
 import logging
 import time
 from collections import Counter
@@ -8,14 +10,21 @@ from io import BytesIO
 from typing import Annotated, Dict, List
 
 import aiopoke
+import boto3
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
 from fastapi import APIRouter, FastAPI, Header
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-
+from starlette.requests import Request
+import pprint
 router = APIRouter()
+
+
+class AnimalModel(BaseModel):
+    name: str
+    legs: int
 
 
 class AllBerryStatsResponseModel(BaseModel):
@@ -110,7 +119,7 @@ async def generate_histogram():
 
 @router.get("/slow_method")
 async def slow_method(
-    #X_Amz_Invocation_Type: str | None = Header(default="'Event'"),
+    # X_Amz_Invocation_Type: str | None = Header(default="'Event'"),
     InvocationType: str | None = Header(default="RequestResponse "),
 ):
     # x_amz_invocation_type
@@ -120,3 +129,188 @@ async def slow_method(
     for i in range(45):
         logging.info(f'i->{i}')
         time.sleep(1)
+
+
+@router.post("/hello")
+def hello(request: Request, animal: AnimalModel) -> AnimalModel:
+    logging.info('m01.hello')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope)
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope['aws.event'])
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope['aws.context'])
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+
+    # logging.info(pprint.pprint(request.scope))
+
+    return animal
+    # return json.dumps(request)
+    # return {"aws_event": request.scope["aws.event"]}
+    # return 'hello'
+
+
+@router.post("/hi")
+def hi(request: Request, animal: AnimalModel) -> AnimalModel:
+    logging.info('m01.hi')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope)
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope['aws.event'])
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope['aws.context'])
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+
+    # scope['aws.event']
+    # scope['aws.context']
+    # return {"aws_event": request.scope["aws.event"]}
+
+    function_arn = request.scope['aws.context'].invoked_function_arn
+    region = request.scope['aws.context'].invoked_function_arn.split(":")[3]
+
+    # lambda_client = boto3.client('lambda', config=boto3.config.Config(region=region))
+    lambda_client = boto3.client('lambda')
+
+    response = lambda_client.invoke(
+        FunctionName=function_arn,
+        InvocationType='Event',
+        Payload=json.dumps({
+
+            "path": '/api/v1/poke-berries/hello',
+            # "path": request.scope['aws.event']['path'],  # "/my/custom/path",
+            # {"param1": "value1","param2": "value2"},
+            # "pathParameters": request.scope['aws.context']['path_params'],
+            # {"data": "payload_data"}
+            "body": request.scope['aws.event']['body']
+        })
+    )
+
+    logging.info(response)
+
+    return animal
+
+
+@router.get("/hi2/{item_id}")
+def hi2(item_id: int) -> int:
+    logging.info('m01.hi2')
+    logging.info('---')
+    logging.info(item_id)
+    logging.info('---')
+    return item_id
+
+
+@router.get("/hi3/{item_id}")
+def hi3(request: Request, item_id: int) -> int:
+    logging.info('m01.hi3')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope)
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope['aws.event'])
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info(request.scope['aws.context'])
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+    logging.info('---')
+
+    # scope['aws.event']
+    # scope['aws.context']
+    # return {"aws_event": request.scope["aws.event"]}
+
+    function_arn = request.scope['aws.context'].invoked_function_arn
+    # region = request.scope['aws.context'].invoked_function_arn.split(":")[3]
+
+    # lambda_client = boto3.client('lambda', config=boto3.config.Config(region=region))
+    lambda_client = boto3.client('lambda')
+
+    response = lambda_client.invoke(
+        FunctionName=function_arn,
+        InvocationType='Event',
+        Payload=json.dumps({
+            "resource": "/{proxy+}",
+            "path": '/api/v1/poke-berries/hi2/' + str(item_id),
+            "httpMethod": "GET",
+            "requestContext": {
+                "accountId": "123456789012",
+                "resourceId": "123456",
+                "stage": "prod",
+                "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
+                "requestTime": "09/Apr/2015:12:34:56 +0000",
+                "requestTimeEpoch": 1428582896000,
+                "identity": {
+                    "cognitoIdentityPoolId": None,
+                    "accountId": None,
+                    "cognitoIdentityId": None,
+                    "caller": None,
+                    "accessKey": None,
+                    "sourceIp": "127.0.0.1",
+                    "cognitoAuthenticationType": None,
+                    "cognitoAuthenticationProvider": None,
+                    "userArn": None,
+                    "userAgent": "Custom User Agent String",
+                    "user": None
+                },
+                "path": "/prod/path/to/resource",
+                "resourcePath": "/{proxy+}",
+                "httpMethod": "POST",
+                "apiId": "1234567890",
+                "protocol": "HTTP/1.1"
+            }
+            # "requestContext": request.scope['aws.context'],
+            # "requestContext": "{}"
+            # "path": request.scope['aws.event']['path'],  # "/my/custom/path",
+            # {"param1": "value1","param2": "value2"},
+            # "pathParameters": request.scope['aws.context']['path_params'],
+            # {"data": "payload_data"}
+            # "body": request.scope['aws.event']['body']
+        })
+    )
+
+    logging.info(response)
+
+    return item_id

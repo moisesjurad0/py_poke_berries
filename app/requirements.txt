@@ -7,3 +7,4 @@ requests
 aiopokeapi
 matplotlib
 numpy
+boto3
